@@ -14,20 +14,21 @@ void simple_time(){
     struct timeval tv;
     __asm__ __volatile__("rdtsc" : "=A" (s));
 
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
-    gettimeofday(&tv,NULL);
+    int i = 0;
+    unsigned long long a, b, c, sum;
 
-    __asm__ __volatile__("rdtsc" : "=A" (e));
+    for(i = 0; i< 15; i++){
+        __asm__ __volatile__("rdtsc" : "=A" (a));
+        gettimeofday(&tv,NULL);
+        __asm__ __volatile__("rdtsc" : "=A" (b));
+       c = b - a;
+       sum = sum + c;
+    }
 
-    printf("%lld\n",e-s);
+    printf("sum = %d\naverage cycles: %d\n", sum, (sum/15));
+    //__asm__ __volatile__("rdtsc" : "=A" (e));
+
+    //printf("%lld\n",e-s);
 }
 
 void main() {
