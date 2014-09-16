@@ -1,7 +1,8 @@
 #include<stdio.h>
 #include <sys/time.h>
 
-void main() {
+void simple_time(){
+
     unsigned long long start = 0;
     unsigned long long end = 0;
     unsigned long long s = 0;
@@ -28,5 +29,13 @@ void main() {
 
     printf("%lld\n",e-s);
 }
+
+void main() {
+    simple_time();
+    //read_time();
+    //mmap_time();
+}
+
+
 
 
