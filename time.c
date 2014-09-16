@@ -17,17 +17,18 @@ void simple_time(){
     int i = 0;
     unsigned long long a, b, c, sum;
 
-    for(i = 0; i< 15; i++){
-        __asm__ __volatile__("rdtsc" : "=A" (a));
+    for(i = 0; i< 3; i++){
+        __asm__ __volatile__("cpuid");
+        __asm__ __volatile__("rdtsc" : "=r" (a): :"eax","edx");
         gettimeofday(&tv,NULL);
-        __asm__ __volatile__("rdtsc" : "=A" (b));
-       c = b - a;
-       sum = sum + c;
+        __asm__ __volatile__("cpuid");
+        __asm__ __volatile__("rdtsc" : "=r" (b): :"eax","edx");
+        c = b - a;
+        sum = sum + c;
     }
 
-    printf("sum = %d\naverage cycles: %d\n", sum, (sum/15));
+    printf("sum = %d\naverage cycles: %d\naverage time: %.2f seconds\n ", sum, (sum/15),((sum/3.0)/3590985000));
     //__asm__ __volatile__("rdtsc" : "=A" (e));
-
     //printf("%lld\n",e-s);
 }
 
@@ -36,7 +37,3 @@ void main() {
     //read_time();
     //mmap_time();
 }
-
-
-
-
