@@ -1,0 +1,38 @@
+
+The cpu speed in Mhz: 3591.014
+
+The cpu speed in hz: 3591013888.000
+
+cycles in gettimeofday(): 3596
+cycles in gettimeofday(): 352
+cycles in gettimeofday(): 220
+cycles in gettimeofday(): 216
+cycles in gettimeofday(): 216
+cycles in gettimeofday(): 216
+cycles in gettimeofday(): 216
+cycles in gettimeofday(): 220
+cycles in gettimeofday(): 220
+cycles in gettimeofday(): 216
+micro seconds for gettimeofday(): 0.158395
+cycles in getpid(): 132
+cycles in getpid(): 116
+cycles in getpid(): 120
+cycles in getpid(): 120
+cycles in getpid(): 120
+cycles in getpid(): 120
+cycles in getpid(): 120
+cycles in getpid(): 120
+cycles in getpid(): 120
+cycles in getpid(): 116
+micro seconds for get_pid(): 0.033528
+cycles in getcwd(): 5472
+cycles in getcwd(): 2576
+cycles in getcwd(): 2288
+cycles in getcwd(): 2344
+cycles in getcwd(): 2248
+cycles in getcwd(): 2252
+cycles in getcwd(): 2256
+cycles in getcwd(): 2256
+cycles in getcwd(): 2284
+cycles in getcwd(): 2248
+micro seconds for get_cwd(): 0.730267
