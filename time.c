@@ -6,7 +6,6 @@
 //char *getcwd(char *buf, size_t size);
 
 inline unsigned long long rdtsc(){
-
     unsigned long long cycle;
     __asm__ __volatile__("cpuid");
     __asm__ __volatile__("rdtsc" : "=r" (cycle): :);
@@ -14,11 +13,9 @@ inline unsigned long long rdtsc(){
 }
 
 unsigned long long call_gettimeofday(){
-
     struct timeval tv;
     unsigned long long start, end, cycles;
     start = rdtsc();
-    //pid_t pid = getpid();
     gettimeofday(&tv,NULL);
     end = rdtsc();
     cycles = end - start;
@@ -27,7 +24,6 @@ unsigned long long call_gettimeofday(){
 }
 
 unsigned long long call_getpid(){
-
     unsigned long long start, end, cycles;
     pid_t pid = getpid();
     start = rdtsc();
@@ -38,7 +34,6 @@ unsigned long long call_getpid(){
 }
 
 unsigned long long call_getcwd(){
-
     char cwd[1024];
     unsigned long long start, end, cycles;
     start = rdtsc();
@@ -50,14 +45,9 @@ unsigned long long call_getcwd(){
 }
 
 void simple_time(){
-
-    unsigned long long num_gettod = call_gettimeofday();
-    unsigned long long num_getpid = call_getpid();
-    unsigned long long num_getcwd = call_getcwd();
     int i;
     int j;
     int k;
-
     float sum1,sum2,sum3;
 
     for(i = 0; i  < 10; i++){
