@@ -5,8 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 
-float getcpu_speed()
-{
+float getcpu_speed(){
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
@@ -15,28 +14,26 @@ float getcpu_speed()
     char * token = NULL;
 
     fp = fopen("/proc/cpuinfo", "r");
-    if (fp == NULL)
-        exit(EXIT_FAILURE);
+    if (fp == NULL){
+        return 0;
+    }
 
     //Tokenizing each line until the cpu speed is found. Once the cpu speed is found, it gets returned
     while ((read = getline(&line, &len, fp)) != -1) {
         token = strtok(line, delim);
-        //printf("cpu speed = %s: \n",token);
         if(strcmp(line, "cpu MHz") == 0){
             token = strtok(NULL," \t:");
-            printf("Returning the speed: %s\n",token);
-            printf("cpu speed: %.3f\n",atof(token));
             return atof(token);
         }
         else{
             token = strtok(NULL,delim);
         }
-
     }
 
-    if (line)
+    if (line){
         free(line);
-    exit(EXIT_SUCCESS);
+        return 0;
+    }
 }
 
 inline unsigned long long rdtsc(){
