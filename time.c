@@ -2,8 +2,42 @@
 #include<stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <string.h>
+#include <ctype.h>
 
-//char *getcwd(char *buf, size_t size);
+float getcpu_speed()
+{
+    FILE * fp;
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+    const char* delim = ":\t";
+    char * token = NULL;
+
+    fp = fopen("/proc/cpuinfo", "r");
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+    //Tokenizing each line until the cpu speed is found. Once the cpu speed is found, it gets returned
+    while ((read = getline(&line, &len, fp)) != -1) {
+        token = strtok(line, delim);
+        //printf("cpu speed = %s: \n",token);
+        if(strcmp(line, "cpu MHz") == 0){
+            token = strtok(NULL," \t:");
+            printf("Returning the speed: %s\n",token);
+            printf("cpu speed: %.3f\n",atof(token));
+            return atof(token);
+        }
+        else{
+            token = strtok(NULL,delim);
+        }
+
+    }
+
+    if (line)
+        free(line);
+    exit(EXIT_SUCCESS);
+}
 
 inline unsigned long long rdtsc(){
     unsigned long long cycle;
@@ -44,26 +78,30 @@ unsigned long long call_getcwd(){
     return cycles;
 }
 
+//figure out how to get cpu speed
 void simple_time(){
     int i;
     int j;
     int k;
     float sum1,sum2,sum3;
+    //float cpu_speed = getcpu_speed()*1000000;
+    float cpu_speed = getcpu_speed()*1000000;
+    printf("The cpu speed in hz: %.3f\n",cpu_speed);
 
     for(i = 0; i  < 10; i++){
         sum1 += call_gettimeofday();
     }
-    printf("micro seconds for gettimeofday(): %f\n",((sum1/10.0)/(.000001*3590985000.0)));
+    printf("micro seconds for gettimeofday(): %f\n",((sum1/10.0)/(.000001*cpu_speed)));
 
     for(j = 0; j  < 10; j++){
         sum2 += call_getpid();
     }
-    printf("micro seconds for get_pid(): %f\n",((sum2/10.0)/(.000001*3590985000.0)));
+    printf("micro seconds for get_pid(): %f\n",((sum2/10.0)/(.000001*cpu_speed)));
 
     for(k = 0; k  < 10; k++){
         sum3 += call_getcwd();
     }
-    printf("micro seconds for get_cwd(): %f\n",((sum3/10.0)/(.000001*3590985000.0)));
+    printf("micro seconds for get_cwd(): %f\n",((sum3/10.0)/(.000001*cpu_speed)));
 }
 
 void main() {
