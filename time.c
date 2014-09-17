@@ -1,73 +1,84 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <unistd.h>
 #include <sys/time.h>
 
-const char *a[3];
+//char *getcwd(char *buf, size_t size);
 
-const char &test(){
-    a[0] = "Faiq fuck off\n";
-    a[1] = "Faiq fuck off dix\n";
-    a[2] = "Faiq fuck off dix nigz\n";
-    int i;
-    //for(i=0; i<3; i++){
-    //    printf(a[i]);
-    //}
+inline unsigned long long rdtsc(){
 
-    return &a;
-
+    unsigned long long cycle;
+    __asm__ __volatile__("cpuid");
+    __asm__ __volatile__("rdtsc" : "=r" (cycle): :);
+    return cycle;
 }
 
-int simple_time(){
+unsigned long long call_gettimeofday(){
 
-    unsigned long long s = 0;
-    unsigned long long e = 0;
-    //__asm__ __volatile__("rdtsc" : "=A" (start));
-    ///__asm__ __volatile__("rdtsc" : "=A" (end));
-
-    //printf("%lld\n",end-start);
     struct timeval tv;
-    //__asm__ __volatile__("rdtsc" : "=A" (s));
-
-    int i = 0;
-    unsigned long long a, b, c, sum;
-
-    //for(i = 0; i< 1; i++){
-    __asm__ __volatile__("cpuid");
-    //__asm__ __volatile__("rdtsc" : "=r" (a): :"eax","edx");
-    __asm__ __volatile__("rdtsc" : "=r" (a): :);
-    //__asm__ __volatile__("rdtsc" : "=A" (a));
+    unsigned long long start, end, cycles;
+    start = rdtsc();
+    //pid_t pid = getpid();
     gettimeofday(&tv,NULL);
-    __asm__ __volatile__("cpuid");
-    //__asm__ __volatile__("rdtsc" : "=r" (b): :"eax","edx");
-    __asm__ __volatile__("rdtsc" : "=r" (b): :);
-    c = b - a;
-    sum = sum + c;
-    //}
+    end = rdtsc();
+    cycles = end - start;
+    printf("cycles in gettimeofday(): %llu\n",cycles);
+    return cycles;
+}
 
-    //printf("sum = %d\naverage cycles: %d\naverage time: %.2f seconds\n ", sum, (sum/1.0),((sum/10.0)/3590985000));
-    //__asm__ __volatile__("rdtsc" : "=A" (e));
-    //printf("%lld\n",e-s);
-    //printf("start %llu\n", a);
-    //printf("stop %llu\n", b);
-    //printf("c is %llu\n ", c);
-    printf("cycles: %llu\n",c);
-    return c;
+unsigned long long call_getpid(){
+
+    unsigned long long start, end, cycles;
+    pid_t pid = getpid();
+    start = rdtsc();
+    end = rdtsc();
+    cycles = end - start;
+    printf("cycles in getpid(): %llu\n",cycles);
+    return cycles;
+}
+
+unsigned long long call_getcwd(){
+
+    char cwd[1024];
+    unsigned long long start, end, cycles;
+    start = rdtsc();
+    getcwd(cwd,sizeof(cwd));
+    end = rdtsc();
+    cycles = end - start;
+    printf("cycles in getcwd(): %llu\n",cycles);
+    return cycles;
+}
+
+void simple_time(){
+
+    unsigned long long num_gettod = call_gettimeofday();
+    unsigned long long num_getpid = call_getpid();
+    unsigned long long num_getcwd = call_getcwd();
+    int i;
+    int j;
+    int k;
+
+    float sum1,sum2,sum3;
+
+    for(i = 0; i  < 10; i++){
+        sum1 += call_gettimeofday();
+    }
+    printf("micro seconds for gettimeofday(): %f\n",((sum1/10.0)/(.000001*3590985000.0)));
+
+    for(j = 0; j  < 10; j++){
+        sum2 += call_getpid();
+    }
+    printf("micro seconds for get_pid(): %f\n",((sum2/10.0)/(.000001*3590985000.0)));
+
+    for(k = 0; k  < 10; k++){
+        sum3 += call_getcwd();
+    }
+    printf("micro seconds for get_cwd(): %f\n",((sum3/10.0)/(.000001*3590985000.0)));
 }
 
 void main() {
 
-    const char* b = test();
-    int j;
-    for(j=0; j<3; j++){
-        printf(&b[j]);
-    }
-    int i;
-    float sum;
-
-    for(i = 0; i  < 10; i++){
-        sum += simple_time();
-    }
-    printf("micro seconds: %f\n",((sum/10.0)/(.000001*3590985000.0)));
+    simple_time();
     //read_time();
     //mmap_time();
 }
