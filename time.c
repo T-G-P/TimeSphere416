@@ -80,16 +80,16 @@ unsigned long long call_getcwd(){
 }
 
 unsigned long long call_read(char* file_name, int fd,size_t num_bytes){
-     unsigned long long start, end, cycles;
-     int bytes_read;
-     char buffer[num_bytes + 1];
+    unsigned long long start, end, cycles;
+    int bytes_read;
+    char buffer[num_bytes + 1];
 
-     start = rdtsc();
-     bytes_read = read(fd, buffer, num_bytes);
-     end = rdtsc();
-     cycles = end - start;
-     printf("cycles in read(): %llu\n",cycles);
-     return cycles;
+    start = rdtsc();
+    bytes_read = read(fd, buffer, num_bytes);
+    end = rdtsc();
+    cycles = end - start;
+    printf("cycles in read(): %llu\n",cycles);
+    return cycles;
 }
 
 unsigned long long *call_mmap(){
@@ -148,44 +148,44 @@ void simple_time(){
 
 void read_time(){
     char buf1[5000];
-     char buf2[10000];
-     char buf3[20000];
+    char buf2[10000];
+    char buf3[20000];
     size_t nbytes;
     ssize_t bytes_read;
-     int fd, i;
-     unsigned long long num_cycles;
-     float sum1, sum2, sum3;
-     float cpu_speed = getcpu_speed()*1000000;
-     char * file1 = "gibberish1.txt";
-     char * file2 = "gibberish2.txt";
-     char * file3 = "gibberish3.txt";
+    int fd, i;
+    unsigned long long num_cycles;
+    float sum1, sum2, sum3;
+    float cpu_speed = getcpu_speed()*1000000;
+    char * file1 = "gibberish1.txt";
+    char * file2 = "gibberish2.txt";
+    char * file3 = "gibberish3.txt";
 
-     nbytes = sizeof(buf1);
-     fd = open(file1, O_RDONLY);
+    nbytes = sizeof(buf1);
+    fd = open(file1, O_RDONLY);
 
-     for(i = 0; i < 50; i++){
-          sum1 += call_read(file1, fd, nbytes);
-     }
+    for(i = 0; i < 50; i++){
+        sum1 += call_read(file1, fd, nbytes);
+    }
 
-     printf("micro seconds for read() on first file: %f\n", ((sum1/50.0)/(.000001*cpu_speed)));
+    printf("micro seconds for read() on first file: %f\n", ((sum1/50.0)/(.000001*cpu_speed)));
 
-     fd = open(file2, O_RDONLY);
-     nbytes = sizeof(buf2);
+    fd = open(file2, O_RDONLY);
+    nbytes = sizeof(buf2);
 
-     for(i = 0; i < 50; i++){
-          sum2 += call_read(file2, fd, nbytes);
-          }
+    for(i = 0; i < 50; i++){
+        sum2 += call_read(file2, fd, nbytes);
+    }
 
-     printf("micro seconds for read() on second file: %f\n", ((sum2/50.0)/(.000001*cpu_speed)));
+    printf("micro seconds for read() on second file: %f\n", ((sum2/50.0)/(.000001*cpu_speed)));
 
-     fd = open(file3, O_RDONLY);
-     nbytes = sizeof(buf3);
-     sum3 = 0.0;
-     for(i = 0; i < 50; i++){
-          sum3 += call_read(file3, fd, nbytes);
-     }
+    fd = open(file3, O_RDONLY);
+    nbytes = sizeof(buf3);
+    sum3 = 0.0;
+    for(i = 0; i < 50; i++){
+        sum3 += call_read(file3, fd, nbytes);
+    }
 
-     printf("micro seconds for read() on third file: %f\n", ((sum3/50.0)/(.000001*cpu_speed)));
+    printf("micro seconds for read() on third file: %f\n", ((sum3/50.0)/(.000001*cpu_speed)));
 }
 
 void mmap_time(){
