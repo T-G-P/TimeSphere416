@@ -83,13 +83,12 @@ unsigned long long call_read(char* file_name, int fd,size_t num_bytes){
      unsigned long long start, end, cycles;
      int bytes_read;
      char buffer[num_bytes + 1];
-     printf("numbytes size yo: %d\n", num_bytes + 1);
 
      start = rdtsc();
      bytes_read = read(fd, buffer, num_bytes);
      end = rdtsc();
      cycles = end - start;
-     printf("cycles up in this ma fugga: %llu\n", cycles);
+     printf("cycles in read(): %llu\n",cycles);
      return cycles;
 }
 
@@ -163,10 +162,9 @@ void read_time(){
 
      nbytes = sizeof(buf1);
      fd = open(file1, O_RDONLY);
-     printf("check check it : %f\n", sum1);
+
      for(i = 0; i < 50; i++){
           sum1 += call_read(file1, fd, nbytes);
-//        printf("sum1: check this shite: %f\n", sum1);
      }
 
      printf("micro seconds for read() on first file: %f\n", ((sum1/50.0)/(.000001*cpu_speed)));
@@ -176,22 +174,18 @@ void read_time(){
 
      for(i = 0; i < 50; i++){
           sum2 += call_read(file2, fd, nbytes);
-          printf("sum2: check this shite: %f\n", sum2);
           }
 
      printf("micro seconds for read() on second file: %f\n", ((sum2/50.0)/(.000001*cpu_speed)));
 
      fd = open(file3, O_RDONLY);
      nbytes = sizeof(buf3);
-     printf("***** sum3 = %f\n", sum3);
      sum3 = 0.0;
      for(i = 0; i < 50; i++){
           sum3 += call_read(file3, fd, nbytes);
-          printf("check check it sum thrice: %f\n", sum3);
      }
 
      printf("micro seconds for read() on third file: %f\n", ((sum3/50.0)/(.000001*cpu_speed)));
-
 }
 
 void mmap_time(){
@@ -202,7 +196,6 @@ void mmap_time(){
 
     for(i = 0; i < 50; i++){
         cycles = call_mmap();
-        printf(" mmap cycles: %llu",cycles[0]);
         sum1 += cycles[0];
     }
     printf("micro seconds for mmap(): %f\n",((sum1/50.0)/(.000001*cpu_speed)));
