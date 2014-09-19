@@ -107,9 +107,9 @@ unsigned long long *call_mmap(){
 
     start = rdtsc();
     mapped_region = mmap (0, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
-    memcpy_dest = (char *) malloc(sizeof(sb.st_size));
     end = rdtsc();
-    cycles2 = end - start;
+    memcpy_dest = (char *) malloc(sizeof(sb.st_size));
+    cycles = end - start;
     printf("cycles in mmap(): %llu\n",cycles);
     result[0] = cycles;
 
@@ -117,7 +117,7 @@ unsigned long long *call_mmap(){
     memcpy(memcpy_dest, mapped_region, sb.st_size);
     end2 = rdtsc();
     cycles2 = end2 - start2;
-    printf("cycles in memcpy(): %llu\n",cycles);
+    printf("cycles in memcpy(): %llu\n",cycles2);
     result[1] = cycles2;
 
     close (fd);
