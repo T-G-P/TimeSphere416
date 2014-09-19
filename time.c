@@ -60,8 +60,8 @@ unsigned long long call_gettimeofday(){
 
 unsigned long long call_getpid(){
     unsigned long long start, end, cycles;
-    pid_t pid = getpid();
     start = rdtsc();
+    pid_t pid = getpid();
     end = rdtsc();
     cycles = end - start;
     printf("cycles in getpid(): %llu\n",cycles);
